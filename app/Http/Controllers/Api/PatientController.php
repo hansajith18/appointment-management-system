@@ -13,7 +13,7 @@ use Throwable;
 class PatientController extends Controller
 {
     // TODO: Apply design pattern
-    
+
     public function getPatientDetails(Request $request, Patient $patient)
     {
         $user = $request->user();
@@ -27,7 +27,7 @@ class PatientController extends Controller
         try {
             Log::info(
                 'GETTING PATIENT DETAILS | LOGGED IN USER: ' . '[' . $user->email . '] ',
-                $user->only(['external_patient_id', 'email', 'username'])
+                $user->only(['external_user_id', 'email', 'username'])
             );
 
             return response(new PatientJsonResource($patient), Response::HTTP_OK);
@@ -35,7 +35,7 @@ class PatientController extends Controller
         } catch (Throwable $e) {
             Log::error(
                 "GETTING PATIENT DETAILS ERROR {$e->getMessage()} | LOGGED IN USER: " . '[' . $user->email . '] ',
-                $user->only(['external_patient_id', 'email', 'username'])
+                $user->only(['external_user_id', 'email', 'username'])
             );
 
             return response([

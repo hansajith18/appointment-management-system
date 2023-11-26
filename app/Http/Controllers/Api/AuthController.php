@@ -48,7 +48,7 @@ class AuthController extends Controller
         if (!$isValidPassword) {
             Log::error(
                 'Bad Credentials, User not authorized | USER LOGIN ATTEMPT BY: ' . '[' . $source . '] ',
-                $user->only(['external_patient_id', 'email', 'username'])
+                $user->only(['external_user_id', 'email', 'username'])
             );
             return response([
                 'success' => false,
@@ -60,7 +60,7 @@ class AuthController extends Controller
         $accessToken = $user->createToken('accessToken')->plainTextToken;
         Log::info(
             'SUCCESSFULLY LOGGED IN | USER LOGGED IN BY: ' . '[' . $source . '] ',
-            $user->only(['external_patient_id', 'email', 'username'])
+            $user->only(['external_user_id', 'email', 'username'])
         );
         return response([
             'success' => true,

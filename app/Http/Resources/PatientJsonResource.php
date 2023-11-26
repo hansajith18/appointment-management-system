@@ -15,10 +15,10 @@ class PatientJsonResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $firstReceipts = $this->receipts->first();
-        $firstInvoices = $this->invoices->first();
-        $firstAppointments = $this->appointments->first();
-        
+        $firstReceipts = $this->receipts->sortBy('receipt_date')->first();
+        $firstInvoices = $this->invoices->sortBy('receipt_date')->first();
+        $firstAppointments = $this->appointments->sortBy('receipt_date')->first();
+
         return [
             "patient_id" => $this->external_patient_id,
             "first_appointment_id" => $firstAppointments?->appointment_id,
