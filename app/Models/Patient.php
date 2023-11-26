@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Patient extends Model
 {
+    protected $withCount = ['invoices', 'appointments', 'receipts'];
+
+    protected $with = ['invoices', 'appointments', 'receipts'];
+
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class, 'external_patient_id', 'external_patient_id');
@@ -14,11 +18,11 @@ class Patient extends Model
 
     public function invoices(): HasMany
     {
-        return $this->hasMany(Appointment::class, 'external_patient_id', 'external_patient_id');
+        return $this->hasMany(Invoice::class, 'external_patient_id', 'external_patient_id');
     }
 
     public function receipts(): HasMany
     {
-        return $this->hasMany(Appointment::class, 'external_patient_id', 'external_patient_id');
+        return $this->hasMany(Receipt::class, 'external_patient_id', 'external_patient_id');
     }
 }

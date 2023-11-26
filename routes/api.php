@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PatientController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('login', [AuthController::class, 'login']);
+
+/**
+ * @Auth-Routes
+ * http://localhost:8000/api/auth/
+ */
+Route::group(['prefix' => 'auth', 'middleware' => ['auth:sanctum']], function () {
+    Route::post('patient-details/{patient:external_patient_id}', [PatientController::class, 'getPatientDetails']);
 });
