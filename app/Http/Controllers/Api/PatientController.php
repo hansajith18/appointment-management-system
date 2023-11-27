@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PatientJsonResource;
+use App\Interfaces\PatientRepositoryInterface;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use Log;
@@ -12,12 +12,17 @@ use Throwable;
 
 class PatientController extends Controller
 {
-    // TODO: Apply design pattern
+    private PatientRepositoryInterface $patientRepository;
+
+    public function __construct(PatientRepositoryInterface $patientRepository)
+    {
+        $this->patientRepository = $patientRepository;
+    }
 
     public function getPatientDetails(Request $request, Patient $patient)
     {
         $user = $request->user();
-        if (!$user) { // Check roles and permissions here or using middleware
+        if (!$user) { //TODO: Check roles and permissions with policies/gate-check here or using middleware
             return response([
                 'success' => false,
                 'message' => 'Illegal attempt..!',
@@ -30,7 +35,7 @@ class PatientController extends Controller
                 $user->only(['external_user_id', 'email', 'username'])
             );
 
-            return response(new PatientJsonResource($patient), Response::HTTP_OK);
+            return response($this->patientRepository->getPatientByExternalId($patient), Response::HTTP_OK);
 
         } catch (Throwable $e) {
             Log::error(
